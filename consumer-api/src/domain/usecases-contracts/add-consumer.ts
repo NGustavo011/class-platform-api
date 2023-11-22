@@ -1,4 +1,4 @@
-import { ConsumerModel } from '../../models/consumer';
+import { ConsumerModel } from '../models/consumer';
 
 export type AddConsumerParams = Omit<ConsumerModel, 'id'>
 export type AddConsumerReturn = ConsumerModel

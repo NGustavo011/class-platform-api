@@ -1,6 +1,6 @@
-import { throwError } from '../../../../domain/test/test-helpers';
-import { GetConsumerRepository } from '../../../repositories-contracts/consumer/get-consumer-repository';
-import { mockConsumerModel, mockGetConsumerParams, mockGetConsumerRepository } from '../../../test/mock-consumer';
+import { throwError } from '../../../domain/test/test-helpers';
+import { GetConsumerRepository } from '../../repositories-contracts/get-consumer-repository';
+import { mockConsumerModel, mockGetConsumerParams, mockGetConsumerRepository } from '../../test/mock-consumer';
 import { GetConsumer } from './get-consumer';
 
 interface SutTypes {

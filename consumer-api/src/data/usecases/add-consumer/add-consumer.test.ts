@@ -1,6 +1,6 @@
-import { throwError } from '../../../../domain/test/test-helpers';
-import { AddConsumerRepository } from '../../../repositories-contracts/consumer/add-consumer-repository';
-import { mockAddConsumerParams, mockAddConsumerRepository, mockConsumerModel } from '../../../test/mock-consumer';
+import { throwError } from '../../../domain/test/test-helpers';
+import { AddConsumerRepository } from '../../repositories-contracts/add-consumer-repository';
+import { mockAddConsumerParams, mockAddConsumerRepository, mockConsumerModel } from '../../test/mock-consumer';
 import { AddConsumer } from './add-consumer';
 
 

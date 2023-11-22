@@ -1,5 +1,5 @@
-import { AddConsumerContract, AddConsumerParams, AddConsumerReturn } from '../../../../domain/usecases-contracts/consumer/add-consumer';
-import { AddConsumerRepository } from '../../../repositories-contracts/consumer/add-consumer-repository';
+import { AddConsumerContract, AddConsumerParams, AddConsumerReturn } from '../../../domain/usecases-contracts/add-consumer';
+import { AddConsumerRepository } from '../../repositories-contracts/add-consumer-repository';
 
 
 export class AddConsumer implements AddConsumerContract {

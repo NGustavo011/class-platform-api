@@ -1,4 +1,4 @@
-import { ConsumerModel } from '../../models/consumer';
+import { ConsumerModel } from '../models/consumer';
 
 export interface GetConsumerParams {
   id: string

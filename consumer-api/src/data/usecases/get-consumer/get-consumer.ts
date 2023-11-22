@@ -1,5 +1,5 @@
-import { GetConsumerContract, GetConsumerParams, GetConsumerReturn } from '../../../../domain/usecases-contracts/consumer/get-consumer';
-import { GetConsumerRepository } from '../../../repositories-contracts/consumer/get-consumer-repository';
+import { GetConsumerContract, GetConsumerParams, GetConsumerReturn } from '../../../domain/usecases-contracts/get-consumer';
+import { GetConsumerRepository } from '../../repositories-contracts/get-consumer-repository';
 
 export class GetConsumer implements GetConsumerContract {
 	constructor(private readonly getConsumerRepository: GetConsumerRepository){

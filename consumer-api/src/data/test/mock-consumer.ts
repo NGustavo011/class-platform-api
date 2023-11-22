@@ -1,8 +1,8 @@
 import { ConsumerModel } from '../../domain/models/consumer';
-import { AddConsumerParams, AddConsumerReturn } from '../../domain/usecases-contracts/consumer/add-consumer';
-import { GetConsumerParams, GetConsumerReturn } from '../../domain/usecases-contracts/consumer/get-consumer';
-import { AddConsumerRepository } from '../repositories-contracts/consumer/add-consumer-repository';
-import { GetConsumerRepository } from '../repositories-contracts/consumer/get-consumer-repository';
+import { AddConsumerParams, AddConsumerReturn } from '../../domain/usecases-contracts/add-consumer';
+import { GetConsumerParams, GetConsumerReturn } from '../../domain/usecases-contracts/get-consumer';
+import { AddConsumerRepository } from '../repositories-contracts/add-consumer-repository';
+import { GetConsumerRepository } from '../repositories-contracts/get-consumer-repository';
 
 export const mockConsumerModel = (): ConsumerModel => ({
 	id: 'any_id',
