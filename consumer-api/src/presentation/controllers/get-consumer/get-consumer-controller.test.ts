@@ -56,9 +56,7 @@ describe('GetConsumer Controller', () => {
 	});
     test('Retorne status 400 se o dado provido for inválido', async () => {
 		const { sut, getConsumerStub } = makeSut();
-		jest.spyOn(getConsumerStub, 'get').mockImplementationOnce(() => {
-            return null
-          })
+		jest.spyOn(getConsumerStub, 'get').mockImplementationOnce(()=>{return Promise.resolve(null)})
         const httpResponse = await sut.execute({
             params: {
                 id: "invalid_id"

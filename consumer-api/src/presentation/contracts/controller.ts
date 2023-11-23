@@ -1,5 +1,6 @@
+import { InvalidParamError } from '../errors/invalid-param-error';
 import { ServerError } from '../errors/server-error';
-import { serverError } from '../helpers/http/http-helper';
+import { badRequest, serverError, unauthorized } from '../helpers/http/http-helper';
 import { type HttpRequest, type HttpResponse } from './http';
 
 
@@ -10,6 +11,19 @@ export abstract class Controller {
 			return output;
 		} catch (error) {
 			console.log(error);
+			if(error instanceof Error){
+				if(error.message.includes('Required')){
+					if(error.message.includes('authorization')){
+						return unauthorized('Token não fornecido');
+					}
+					const invalidParams: string[] = [];
+					for(const match of error.message.matchAll(/"path": \[\n[ ]*"(\S+)"/gm)){
+						invalidParams.push(match[1]);
+					}
+					return badRequest(new InvalidParamError(invalidParams.join(', ')));
+				}
+			}
+			console.log(error.message);
 			return serverError(new ServerError());
 		}
 	}
