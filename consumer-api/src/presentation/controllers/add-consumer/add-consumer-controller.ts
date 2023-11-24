@@ -9,10 +9,6 @@ const addConsumerSchema = z.object({
 	cpf: z.string()
 });
 
-const addConsumerHeaders = z.object({
-	authorization: z.string()
-});
-
 export class AddConsumerController extends Controller {
 	constructor(
         private readonly addConsumer: AddConsumerContract
