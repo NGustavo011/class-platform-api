@@ -1,5 +1,6 @@
 import { BuyerModel } from '../../domain/models/buyer'
+import { GetBuyerParams, GetBuyerReturn } from '../../domain/usecases-contracts/get-buyer'
 
 export interface GetBuyerRepository {
-  get: (id: string) => Promise<BuyerModel | null>
+  get: (id: GetBuyerParams) => Promise<GetBuyerReturn | null>
 }
