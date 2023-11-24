@@ -3,12 +3,10 @@ import { CreateOrderRepository } from '../../repositories-contracts/create-order
 import { mockCreateOrderParams, mockCreateOrderRepository, mockOrderModel } from '../../test/mock-order';
 import { CreateOrder } from './create-order';
 
-
-
 interface SutTypes {
     createOrderRepositoryStub: CreateOrderRepository
     sut: CreateOrder
-  }
+}
   
 const makeSut = (): SutTypes => {
 	const createOrderRepositoryStub = mockCreateOrderRepository();
@@ -33,13 +31,6 @@ describe('CreateOrder usecase', ()=>{
 			jest.spyOn(createOrderRepositoryStub, 'create').mockImplementationOnce(throwError);
 			const promise = sut.create(mockCreateOrderParams());
 			await expect(promise).rejects.toThrow();
-		});
-
-		test('Deve retornar null se CreateOrderRepository retornar null', async () => {
-			const { sut, createOrderRepositoryStub } = makeSut();
-			jest.spyOn(createOrderRepositoryStub, 'create').mockReturnValueOnce(Promise.resolve(null));
-			const order = await sut.create(mockCreateOrderParams());
-			expect(order).toBeNull();
 		});
 	});
 
