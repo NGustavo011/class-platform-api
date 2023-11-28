@@ -6,6 +6,8 @@ import { CreateOrderContract } from '../../../domain/usecases-contracts/create-o
 import { GetBuyerContract } from '../../../domain/usecases-contracts/get-buyer';
 import { GetCourseContract } from '../../../domain/usecases-contracts/get-course';
 import { InvalidParamError } from '../../errors/invalid-param-error';
+import RabbitmqServer from '../../../main/rabbitmq-server';
+import env from '../../../main/config/env';
 
 const createOrderSchema = z.object({
 	buyerId: z.string(),
@@ -16,7 +18,9 @@ export class CreateOrderController extends Controller {
 	constructor(
 		private readonly getBuyer: GetBuyerContract,
 		private readonly getCourse: GetCourseContract,
-        private readonly createOrder: CreateOrderContract
+        private readonly createOrder: CreateOrderContract,
+		private readonly rabbitmqServer?: RabbitmqServer,
+		private readonly rabbitmqQueue?: string
 	){
 		super();
 	}
@@ -39,6 +43,10 @@ export class CreateOrderController extends Controller {
 			courseId,
 			course
 		});
+		if(this.rabbitmqServer && this.rabbitmqQueue) {
+        	await this.rabbitmqServer.start();
+			await this.rabbitmqServer.publishInQueue(this.rabbitmqQueue, JSON.stringify(createOrderData));
+		}
 		return ok(createOrderData);
 	}
 }

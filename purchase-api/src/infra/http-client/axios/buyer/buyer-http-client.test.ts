@@ -9,9 +9,9 @@ describe('BuyerHttpClient', () => {
   describe('get()', () => {
     test('Deve retornar dados de um buyer corretamente em caso de sucesso', async () => {
       const sut = makeSut()
-      const buyer = await sut.get('e1ec5061-4954-43b3-8d05-61094b62920c')
+      const buyer = await sut.get('ca4a9e68-766f-43e2-a53a-489748fe07d5')
       expect(buyer).toBeTruthy()
-      expect(buyer?.id).toBe('e1ec5061-4954-43b3-8d05-61094b62920c')
+      expect(buyer?.id).toBe('ca4a9e68-766f-43e2-a53a-489748fe07d5')
       expect(buyer?.name).toBeTruthy()
       expect(buyer?.cpf).toBeTruthy()
     })

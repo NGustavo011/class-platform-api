@@ -1,5 +1,3 @@
-import { mockBuyerModel } from '../../../data/test/mock-buyer';
-import { mockCourseModel } from '../../../data/test/mock-course';
 import { mockOrderModel } from '../../../data/test/mock-order';
 import { throwError } from '../../../domain/test/test-helpers';
 import { CreateOrderContract } from '../../../domain/usecases-contracts/create-order';
@@ -12,6 +10,9 @@ import { mockGetBuyer } from '../../test/mock-buyer';
 import { mockGetCourse } from '../../test/mock-course';
 import { mockCreateOrder } from '../../test/mock-order';
 import { CreateOrderController } from './create-order-controller';
+import { mockRabbitmqServer, mockRabbitmqQueue } from "../../test/mock-rabbitmq"
+import { describe } from 'node:test';
+import RabbitmqServer from '../../../main/rabbitmq-server';
 
 const mockRequest = (): HttpRequest => {
 	return {
@@ -26,19 +27,25 @@ interface SutTypes {
   sut: CreateOrderController,
   getBuyerStub: GetBuyerContract,
   getCourseStub: GetCourseContract,
-  createOrderStub: CreateOrderContract
+  createOrderStub: CreateOrderContract,
+  rabbitmqServer?: RabbitmqServer,
+  rabbitmqQueue?: string
 }
 
 const makeSut = (): SutTypes => {
 	const getBuyerStub = mockGetBuyer();
 	const getCourseStub = mockGetCourse();
 	const createOrderStub = mockCreateOrder();
-	const sut = new CreateOrderController(getBuyerStub, getCourseStub, createOrderStub);
+	const rabbitmqServer = mockRabbitmqServer();
+	const rabbitmqQueue = mockRabbitmqQueue();
+	const sut = new CreateOrderController(getBuyerStub, getCourseStub, createOrderStub, rabbitmqServer, rabbitmqQueue);
 	return {
 		sut,
 		getBuyerStub,
 		getCourseStub,
-		createOrderStub
+		createOrderStub,
+		rabbitmqServer,
+		rabbitmqQueue
 	};
 };
 
@@ -112,6 +119,17 @@ describe('CreateOrder Controller', () => {
 			expect(httpResponse).toEqual(serverError(new Error()));
 		});
 	});
+	describe('RabbitmqServer dependecy', ()=> {
+		test('Se for passado RabbitmqServer e RabbitmqQueue deve chamar o método do start', async () => {
+			const { sut, rabbitmqServer, rabbitmqQueue } = makeSut();
+			const startSpy = jest.spyOn(rabbitmqServer as RabbitmqServer, 'start');
+			const request = mockRequest();
+			await sut.execute(request);
+			expect(rabbitmqServer).not.toBeNull()
+			expect(rabbitmqQueue).not.toBeNull()
+			expect(startSpy).toHaveBeenCalled()
+		});
+	})
 	test('Retorne status 200 se o dado provido for válido', async () => {
 		const { sut } = makeSut();
 		const httpResponse = await sut.execute(mockRequest());

@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+    order:
+        image: postgres
+        container_name: database_order
+        restart: always
+        ports: 
+            - 5434:5432
+        environment:
+            - POSTGRES_USER=ouser
+            - POSTGRES_PASSWORD=opassword
+            - POSTGRES_DB=order
+
+    course:
+        image: postgres
+        container_name: database_course
+        restart: always
+        ports: 
+            - 5433:5432
+        environment:
+            - POSTGRES_USER=couser
+            - POSTGRES_PASSWORD=copassword
+            - POSTGRES_DB=course
+
+    consumer:
+        image: postgres
+        container_name: database_consumer
+        restart: always
+        ports: 
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=cuser
+            - POSTGRES_PASSWORD=cpassword
+            - POSTGRES_DB=consumer
+
+    rabbitmq:
+        image: "rabbitmq:3.8-management-alpine"
+        container_name: purchase-rabbitmq
+        hostname: rabbitmq
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        volumes:
+            - "./.rabbitmq_data:/var/lib/rabbitmq/mnesia"
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=admin
