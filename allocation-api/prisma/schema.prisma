@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RegistrationAgreement {
+  id       String @id @default(uuid())
+  courseId String
+  buyerId String
+  orderId String
+  startDate DateTime @default(now())
+  endDate DateTime @default(dbgenerated("NOW() + interval '1 year'"))
+}

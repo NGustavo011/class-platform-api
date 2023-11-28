@@ -1,6 +1,17 @@
 version: "3.7"
 
 services:
+    allocation:
+        image: postgres
+        container_name: database_allocation
+        restart: always
+        ports: 
+            - 5435:5432
+        environment:
+            - POSTGRES_USER=ouser
+            - POSTGRES_PASSWORD=opassword
+            - POSTGRES_DB=allocation
+
     order:
         image: postgres
         container_name: database_order
