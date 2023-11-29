@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { CreateRegistrationAgreementContract } from '../../../domain/usecases-contracts/create-registration-agreement';
 import { RabbitmqController } from '../../contracts/rabbitmq-controller';
+import { Message } from 'amqplib';
 
 const createRegistrationAgreementSchema = z.object({
 	buyerId: z.string(),
 	courseId: z.string(),
-	orderId: z.string()
+	id: z.string()
 });
 
 export class CreateRegistrationAgreementController extends RabbitmqController {
@@ -15,17 +16,18 @@ export class CreateRegistrationAgreementController extends RabbitmqController {
 		super();
 	}
 
-	async handle(message: any): Promise<void> {
-		const schemaResult = createRegistrationAgreementSchema.parse(message);
+	async handle(message: Message): Promise<void> {
+		const messageObject = JSON.parse(message.content.toString());
+		const schemaResult = createRegistrationAgreementSchema.parse(messageObject);
 		const { 
 			buyerId,
 			courseId,
-			orderId
+			id
 		} = schemaResult;
 		await this.createRegistrationAgreement.create({
 			buyerId,
 			courseId,
-			orderId
+			orderId: id
 		});
 	}
 }

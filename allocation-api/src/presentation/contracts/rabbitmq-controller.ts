@@ -1,7 +1,9 @@
+import { Message } from "amqplib";
+
 export abstract class RabbitmqController {
-	async execute (message: any): Promise<void> {
+	async execute (message: Message): Promise<void> {
 		await this.handle(message);
 	}
 
-  abstract handle (message: any): Promise<void>
+  abstract handle (message: Message): Promise<void>
 }
