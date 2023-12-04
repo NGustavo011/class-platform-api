@@ -1,12 +1,18 @@
 import { CreateRegistrationAgreementContract } from '../../../domain/usecases-contracts/create-registration-agreement';
 import { CreateRegistrationAgreementController } from './create-registration-agreement-controller';
 import { mockCreateRegistrationAgreement } from '../../test/mock-registration-agreement';
+import { Message } from '../../../main/types/message'
 
-const mockMessage = (): any => {
-	return {
+const mockMessage = (): Message => {
+	const messageObject = {
 		buyerId: 'any_buyer_id',
 		courseId: 'any_course_id',
-		orderId: 'any_order_id'
+		id: 'any_order_id'
+	};
+	const messageString = JSON.stringify(messageObject);
+	const message = Buffer.from(messageString)
+	return {
+		content: message
 	};
 };
 
@@ -38,10 +44,11 @@ describe('CreateRegistrationAgreement Controller', () => {
 			const createSpy = jest.spyOn(createRegistrationAgreementStub, 'create');
 			const message = mockMessage();
 			await sut.execute(message);
+			const messageObject = JSON.parse(message.content.toString());
 			expect(createSpy).toHaveBeenCalledWith({
-				buyerId: message.buyerId,
-				courseId: message.courseId,
-				orderId: message.orderId
+				buyerId: messageObject.buyerId,
+				courseId: messageObject.courseId,
+				orderId: messageObject.id
 			});
 		});
 	});

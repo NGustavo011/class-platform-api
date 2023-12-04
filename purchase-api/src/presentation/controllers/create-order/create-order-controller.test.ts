@@ -10,7 +10,7 @@ import { mockGetBuyer } from '../../test/mock-buyer';
 import { mockGetCourse } from '../../test/mock-course';
 import { mockCreateOrder } from '../../test/mock-order';
 import { CreateOrderController } from './create-order-controller';
-import { mockRabbitmqServer, mockRabbitmqQueue } from "../../test/mock-rabbitmq"
+import { mockRabbitmqServer, mockRabbitmqQueue, mockRabbitmqExchange, mockRabbitmqRoutingKey } from "../../test/mock-rabbitmq"
 import { describe } from 'node:test';
 import RabbitmqServer from '../../../main/rabbitmq-server';
 
@@ -28,8 +28,10 @@ interface SutTypes {
   getBuyerStub: GetBuyerContract,
   getCourseStub: GetCourseContract,
   createOrderStub: CreateOrderContract,
-  rabbitmqServer?: RabbitmqServer,
-  rabbitmqQueue?: string
+  rabbitmqServer: RabbitmqServer,
+  rabbitmqQueue: string,
+  rabbitmqExchange: string,
+  rabbitmqRoutingKey: string
 }
 
 const makeSut = (): SutTypes => {
@@ -38,14 +40,18 @@ const makeSut = (): SutTypes => {
 	const createOrderStub = mockCreateOrder();
 	const rabbitmqServer = mockRabbitmqServer();
 	const rabbitmqQueue = mockRabbitmqQueue();
-	const sut = new CreateOrderController(getBuyerStub, getCourseStub, createOrderStub, rabbitmqServer, rabbitmqQueue);
+	const rabbitmqExchange = mockRabbitmqExchange();
+	const rabbitmqRoutingKey = mockRabbitmqRoutingKey();
+	const sut = new CreateOrderController(getBuyerStub, getCourseStub, createOrderStub, rabbitmqServer, rabbitmqQueue, rabbitmqExchange, rabbitmqRoutingKey);
 	return {
 		sut,
 		getBuyerStub,
 		getCourseStub,
 		createOrderStub,
 		rabbitmqServer,
-		rabbitmqQueue
+		rabbitmqQueue,
+		rabbitmqExchange,
+		rabbitmqRoutingKey
 	};
 };
 
@@ -120,14 +126,25 @@ describe('CreateOrder Controller', () => {
 		});
 	});
 	describe('RabbitmqServer dependecy', ()=> {
-		test('Se for passado RabbitmqServer e RabbitmqQueue deve chamar o método do start', async () => {
+		test('Se for passado RabbitmqServer e RabbitmqQueue deve chamar o método do publishInQueue', async () => {
 			const { sut, rabbitmqServer, rabbitmqQueue } = makeSut();
-			const startSpy = jest.spyOn(rabbitmqServer as RabbitmqServer, 'start');
+			const publishInQueueSpy = jest.spyOn(rabbitmqServer as RabbitmqServer, 'publishInQueue');
 			const request = mockRequest();
 			await sut.execute(request);
 			expect(rabbitmqServer).not.toBeNull()
 			expect(rabbitmqQueue).not.toBeNull()
-			expect(startSpy).toHaveBeenCalled()
+			expect(publishInQueueSpy).toHaveBeenCalled()
+		});
+
+		test('Se for passado RabbitmqServer, RabbitmqExchange e RabbitmqRoutingKey deve chamar o método do publishInExchange', async () => {
+			const { sut, rabbitmqServer, rabbitmqExchange, rabbitmqRoutingKey } = makeSut();
+			const publishInExchangeSpy = jest.spyOn(rabbitmqServer as RabbitmqServer, 'publishInExchange');
+			const request = mockRequest();
+			await sut.execute(request);
+			expect(rabbitmqServer).not.toBeNull()
+			expect(rabbitmqExchange).not.toBeNull()
+			expect(rabbitmqRoutingKey).not.toBeNull()
+			expect(publishInExchangeSpy).toHaveBeenCalled()
 		});
 	})
 	test('Retorne status 200 se o dado provido for válido', async () => {

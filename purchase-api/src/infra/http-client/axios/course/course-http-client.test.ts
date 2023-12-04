@@ -9,9 +9,9 @@ describe('CourseHttpClient', () => {
   describe('get()', () => {
     test('Deve retornar dados de um course corretamente em caso de sucesso', async () => {
       const sut = makeSut()
-      const course = await sut.get('c8eaf6c1-756d-4902-838b-9d51e7a1d404')
+      const course = await sut.get('70e8abe1-e9ea-44ee-96d1-2d90fd03f802')
       expect(course).toBeTruthy()
-      expect(course?.id).toBe('c8eaf6c1-756d-4902-838b-9d51e7a1d404')
+      expect(course?.id).toBe('70e8abe1-e9ea-44ee-96d1-2d90fd03f802')
       expect(course?.name).toBeTruthy()
       expect(course?.description).toBeTruthy()
     })

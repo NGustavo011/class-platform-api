@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { CreateRegistrationAgreementContract } from '../../../domain/usecases-contracts/create-registration-agreement';
 import { RabbitmqController } from '../../contracts/rabbitmq-controller';
-import { Message } from 'amqplib';
+import { Message } from '../../../main/types/message'
 
 const createRegistrationAgreementSchema = z.object({
 	buyerId: z.string(),

@@ -20,7 +20,9 @@ export class CreateOrderController extends Controller {
 		private readonly getCourse: GetCourseContract,
         private readonly createOrder: CreateOrderContract,
 		private readonly rabbitmqServer?: RabbitmqServer,
-		private readonly rabbitmqQueue?: string
+		private readonly rabbitmqQueue?: string,
+		private readonly rabbitmqExchange?: string,
+        private readonly rabbitmqRoutingKey?: string
 	){
 		super();
 	}
@@ -46,6 +48,10 @@ export class CreateOrderController extends Controller {
 		if(this.rabbitmqServer && this.rabbitmqQueue) {
         	await this.rabbitmqServer.start();
 			await this.rabbitmqServer.publishInQueue(this.rabbitmqQueue, JSON.stringify(createOrderData));
+		}
+		if(this.rabbitmqServer && this.rabbitmqExchange && this.rabbitmqRoutingKey) {
+        	await this.rabbitmqServer.start();
+			await this.rabbitmqServer.publishInExchange(this.rabbitmqExchange, this.rabbitmqRoutingKey, JSON.stringify(createOrderData));
 		}
 		return ok(createOrderData);
 	}

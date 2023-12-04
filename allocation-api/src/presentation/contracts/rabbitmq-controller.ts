@@ -1,4 +1,4 @@
-import { Message } from "amqplib";
+import { Message } from '../../main/types/message'
 
 export abstract class RabbitmqController {
 	async execute (message: Message): Promise<void> {

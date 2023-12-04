@@ -8,3 +8,11 @@ export const mockRabbitmqServer = (): RabbitmqServer => {
 export const mockRabbitmqQueue = (): string => {
     return env.rabbitmqQueue;
 }
+
+export const mockRabbitmqExchange = (): string => {
+    return env.rabbitmqExchange;
+}
+
+export const mockRabbitmqRoutingKey = (): string => {
+    return env.rabbitmqRoutingKey
+}

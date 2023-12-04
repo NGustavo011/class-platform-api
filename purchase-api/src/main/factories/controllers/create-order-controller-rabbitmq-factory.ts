@@ -9,6 +9,8 @@ import { makeGetCourse } from "../usecases/get-course-factory";
 export const makeCreateOrderControllerRabbitmq = (): Controller => {
     const rabbitmqServer = new RabbitmqServer(env.rabbitmqServer);
     const rabbitmqPublishQueue = env.rabbitmqQueue;
-	const controller = new CreateOrderController(makeGetBuyer(), makeGetCourse(), makeCreateOrder(), rabbitmqServer, rabbitmqPublishQueue);
+    const rabbitmqExchange = env.rabbitmqExchange;
+    const rabbitmqRoutingKey = env.rabbitmqRoutingKey;
+	const controller = new CreateOrderController(makeGetBuyer(), makeGetCourse(), makeCreateOrder(), rabbitmqServer, rabbitmqPublishQueue, rabbitmqExchange, rabbitmqRoutingKey);
 	return controller;
 };

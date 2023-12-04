@@ -15,6 +15,14 @@ export default class RabbitmqServer {
         return this.channel.sendToQueue(queue, Buffer.from(message));
     }
 
+    async publishInExchange(
+        exchange: string,
+        routingKey: string,
+        message: string
+    ): Promise<boolean> {
+        return this.channel.publish(exchange, routingKey, Buffer.from(message));
+    }
+
     async consumeQueue(queue: string, callback: (message: Message)=>void){
         return this.channel.consume(queue, (message)=>{
             if(message){
